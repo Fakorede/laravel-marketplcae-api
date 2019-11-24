@@ -26,13 +26,13 @@ class DatabaseSeeder extends Seeder
         DB::table('category_product')->truncate();
 
         factory(User::class, 200)->create();
-        factory(Category::class, 30)->create();
-        factory(Product::class, 1000)->create()->each(
+        factory(Category::class, 20)->create();
+        factory(Product::class, 50)->create()->each(
             function ($product) {
                 $categories = Category::all()->random(mt_rand(1, 5))->pluck('id');
                 $product->categories()->attach($categories);
             }
         );
-        factory(Transaction::class, 1000)->create();
+        factory(Transaction::class, 100)->create();
     }
 }
