@@ -23,6 +23,8 @@ Route::resource('users', 'User\UserController')->except(['create', 'edit']);
  * Buyers
  */
 Route::resource('buyers', 'Buyer\BuyerController')->only(['index', 'show']);
+Route::resource('buyers.products', 'Buyer\BuyerProductController')->only(['index']);
+Route::resource('buyers.transactions', 'Buyer\BuyerTransactionController')->only(['index']);
 /**
  * Sellers
  */
