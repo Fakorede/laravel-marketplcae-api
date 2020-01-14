@@ -19,6 +19,13 @@ class Category extends Model
      */
     protected $fillable = ['name', 'description'];
 
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['pivot'];
+
     public function products() 
     {
         return $this->belongsToMany(Product::class);

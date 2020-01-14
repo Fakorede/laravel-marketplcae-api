@@ -24,6 +24,13 @@ class Product extends Model
      */
     protected $fillable = ['name', 'description', 'quantity', 'status', 'image', 'seller_id'];
 
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['pivot'];
+
     public function isAvailable() 
     {
         return $this->status === Product::AVAILABLE_PRODUCT;
