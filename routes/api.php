@@ -39,6 +39,7 @@ Route::resource('sellers.transactions', 'Seller\SellerTransactionController')->o
  * Products
  */
 Route::resource('products', 'Product\ProductController')->only(['index', 'show']);
+Route::resource('products.transactions', 'Product\ProductTransactionController')->only(['index']);
 /**
  * Categories
  */
