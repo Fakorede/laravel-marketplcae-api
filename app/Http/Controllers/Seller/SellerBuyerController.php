@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Seller;
 use App\Http\Controllers\ApiController;
 use App\Seller;
 
-class SellerCategoryController extends ApiController
+class SellerBuyerController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -14,15 +14,16 @@ class SellerCategoryController extends ApiController
      */
     public function index(Seller $seller)
     {
-        $categories = $seller->products()
-            ->whereHas('categories')
-            ->with('categories')
+        $buyers = $seller->products()
+            ->whereHas('transactions')
+            ->with('transactions.buyer')
             ->get()
-            ->pluck('categories')
+            ->pluck('transactions')
             ->collapse()
+            ->pluck('buyer')
             ->unique('id')
             ->values();
-
-        return $this->showAll($categories);
+            
+        return $this->showAll($buyers);
     }
 }
