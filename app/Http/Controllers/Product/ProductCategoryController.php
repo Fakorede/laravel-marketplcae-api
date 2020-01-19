@@ -27,4 +27,14 @@ class ProductCategoryController extends ApiController
         return $this->showAll($product->categories);
     }
 
+    public function destroy(Request $request, Product $product, Category $category)
+    {
+        if(!$product->categories()->find($category->id)) {
+            return $this->errorResponse('This product does not have specified category', 404);
+        }
+
+        $product->categories()->detach($category->id);
+        return $this->showAll($product->categories);
+    }
+
 }
