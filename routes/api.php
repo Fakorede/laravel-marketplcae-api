@@ -19,6 +19,7 @@
  * Users
  */
 Route::resource('users', 'User\UserController')->except(['create', 'edit']);
+Route::name('verify')->get('user/verify/{token}', 'User\UserController@verify');
 /**
  * Buyers
  */

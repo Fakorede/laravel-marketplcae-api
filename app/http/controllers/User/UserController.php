@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\ApiController;
 use App\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\ApiController;
 
 class UserController extends ApiController
 {
@@ -113,5 +113,17 @@ class UserController extends ApiController
     {
         $user->delete();
         return $this->showOne($user);
+    }
+
+    public function verify($token)
+    {
+        $user = User::where('verification_token', $token)->firstOrFail();
+
+        $user->verified = User::VERIFIED_USER;
+        $user->verification_token = null;
+
+        $user->save();
+
+        return $this->showMessage('Account verification successful!');
     }
 }
