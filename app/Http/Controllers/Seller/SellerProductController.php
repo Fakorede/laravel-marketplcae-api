@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Seller;
 
-use App\User;
-use App\Seller;
-use App\Product;
-use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
+use App\Product;
+use App\Seller;
+use App\User;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SellerProductController extends ApiController
@@ -41,7 +41,7 @@ class SellerProductController extends ApiController
 
         $data = $request->all();
         $data['status'] = Product::UNAVAILABLE_PRODUCT;
-        $data['image'] = '1.jpg';
+        $data['image'] = $request->image->store('');
         $data['seller_id'] = $seller->id;
 
         $product = Product::create($data);
@@ -60,7 +60,7 @@ class SellerProductController extends ApiController
         $rules = [
             'quantity' => 'integer|min:1',
             'status' => 'in:' . Product::AVAILABLE_PRODUCT . ',' . Product::UNAVAILABLE_PRODUCT,
-            'image' => 'image'
+            'image' => 'image',
         ];
 
         $this->validate($request, $rules);
@@ -68,18 +68,18 @@ class SellerProductController extends ApiController
         $this->checkSeller($seller, $product);
 
         $product->fill($request->only([
-            'name', 'description', 'quantity'
+            'name', 'description', 'quantity',
         ]));
 
-        if($request->has('status')) {
+        if ($request->has('status')) {
             $product->status = $request->status;
 
-            if($product->isAvailable() && $product->categories()->count() === 0) {
+            if ($product->isAvailable() && $product->categories()->count() === 0) {
                 return $this->errorResponse('An active product must have at least one category', 409);
             }
         }
 
-        if($product->isClean()) {
+        if ($product->isClean()) {
             return $this->errorResponse('You need to make at least a change to update', 422);
         }
 
@@ -102,8 +102,9 @@ class SellerProductController extends ApiController
         return $this->showOne($product);
     }
 
-    protected function checkSeller(Seller $seller, Product $product) {
-        if($seller->id !== $product->seller_id) {
+    protected function checkSeller(Seller $seller, Product $product)
+    {
+        if ($seller->id !== $product->seller_id) {
             throw new HttpException(422, "Specified seller not the owner of product");
         }
     }
