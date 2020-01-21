@@ -81,6 +81,11 @@ class SellerProductController extends ApiController
             }
         }
 
+        if($request->hasFile('image')) {
+            Storage::delete($product->image);
+            $product->image = $request->image->store('');
+        }
+
         if ($product->isClean()) {
             return $this->errorResponse('You need to make at least a change to update', 422);
         }
