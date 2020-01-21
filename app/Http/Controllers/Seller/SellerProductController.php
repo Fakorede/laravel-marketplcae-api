@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Seller;
 
-use App\Http\Controllers\ApiController;
-use App\Product;
-use App\Seller;
 use App\User;
+use App\Seller;
+use App\Product;
+use App\Http\Controllers\ApiController;
+use Illuminate\Support\Facades\Storage;
+
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -97,6 +99,8 @@ class SellerProductController extends ApiController
     public function destroy(Seller $seller, Product $product)
     {
         $this->checkSeller($seller, $product);
+        
+        Storage::delete($product->image);
         $product->delete();
 
         return $this->showOne($product);
